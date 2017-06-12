@@ -13,4 +13,5 @@ Table of Contents
    advanced/index.rst
    reference/index.rst
    changelog
+   upgrade_guide
    glossary

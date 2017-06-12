@@ -14,7 +14,7 @@ Creating a ``DNSName`` is done with the :func:`newDNSName`::
 
 dnsdist will complain loudly if the name is invalid (e.g. too long, dot in the wrong place).
 
-``myname`` has several functions to get information from it
+The ``myname`` variable has several functions to get information from it
 
 .. code-block:: lua
 
@@ -34,6 +34,13 @@ Functions and methods of a ``DNSName``
   Returns the :class:`DNSName` object of ``name``.
 
   :param string name: The name to create a DNSName for
+
+.. classmethod:: DNSName::chopoff() -> bool
+
+  .. versionadded:: 1.2.0
+
+  Removes the left-most label and returns ``true``.
+  ``false`` is returned if no label was removed
 
 .. classmethod:: DNSName:countLabels() -> int
 

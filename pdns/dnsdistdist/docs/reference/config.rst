@@ -35,10 +35,41 @@ The ``.`` means ``order`` is a data member, while the ``:`` means ``addPool`` is
 Global configuration
 --------------------
 
+.. function:: includeDirectory(path)
+
+  Include configuration files from ``path``.
+
+  :param str path: The directory to load the configuration from
+
 Listen Sockets
 ~~~~~~~~~~~~~~
 
+.. function:: addLocal(address[, options])
+
+  .. versionadded:: 1.2.0
+
+  Add to the list of listen addresses.
+
+  :param str address: The IP Address with an optional port to listen on.
+                      The default port is 53.
+  :param table options: A table with key: value pairs with listen options.
+
+  Options:
+
+  * ``doTCP=true``: bool - Also bind on TCP on ``address``.
+  * ``reusePort=false``: bool - Set the ``SO_REUSEPORT`` socket option.
+  * ``tcpFastOpenSize=0``: int - Set the TCP Fast Open queue size, enabling TCP Fast Open when available and the value is larger than 0
+  * ``interface=""``: str - Sets the network interface to use
+
+  .. code-block:: lua
+
+    addLocal('0.0.0.0:5300', { doTCP=true, reusePort=true })
+
+  This will bind to both UDP and TCP on port 5300 with SO_REUSEPORT enabled.
+
 .. function:: addLocal(address[[[,do_tcp], so_reuseport], tcp_fast_open_qsize])
+
+  .. deprecated:: 1.2.0
 
   Add to the list of addresses listened on.
 
@@ -49,7 +80,21 @@ Listen Sockets
   :param int tcp_fast_open_qsize: Set to a number higher than 0 to enable TCP Fast Open
                                   when available. Default is 0.
 
+.. function:: setLocal(address[, options])
+
+  .. versionadded:: 1.2.0
+
+  Remove the list of listen addresses and add a new one.
+
+  :param str address: The IP Address with an optional port to listen on.
+                      The default port is 53.
+  :param table options: A table with key: value pairs with listen options.
+
+  The options that can be set are the same as :func:`addLocal`.
+
 .. function:: setLocal(address[[[,do_tcp], so_reuseport], tcp_fast_open_qsize])
+
+  .. deprecated:: 1.2.0
 
   Remove the list of listen addresses and add a new one.
 
@@ -550,9 +595,30 @@ Managing Rules
               addAction(names, action)
               addAction(netblock, action)
               addAction(netblocks, action)
+              addAction(dnsname, action)
+              addAction(dnsnames, action)
 
 
   Add a Rule and Action to the existing rules.
+
+  :param Rule rule: A DNS Rule, e.g. an :func:`allRule` or a compounded bunch of rules using e.g. :func:`AndRule`
+  :param str name: A domain name
+  :param {str} names: A list of domain names to match
+  :param str netblock: An IPv4 or IPv6 netblock
+  :param {str} netblocks: A list of IPv4 or IPv6 netblocks
+  :param DNSName dnsname: A :class:`DNSName`
+  :param {DNSName} dnsnames: A list of :class:`DNSName`s
+
+  .. versionadded:: 1.2.0
+     DNSName rules.
+
+.. function:: addResponseAction(rule, action)
+              addResponseAction(name, action)
+              addResponseAction(names, action)
+              addResponseAction(netblock, action)
+              addResponseAction(netblocks, action)
+
+  Add a Rule and Action for responses to the existing rules.
 
   :param Rule rule: A DNS Rule, e.g. an :func:`allRule` or a compounded bunch of rules using e.g. :func:`AndRule`
   :param str name: A domain name

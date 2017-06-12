@@ -78,6 +78,8 @@ It also supports the following methods:
 
 .. classmethod:: DNSQuestion.getDO() -> bool
 
+  .. versionadded:: 1.2.0
+
   Get the value of the DNSSEC OK bit.
 
   :returns: true if the DO bit was set, false otherwise

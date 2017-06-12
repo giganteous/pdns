@@ -1,6 +1,22 @@
 Changelog
 =========
 
+1.2.0
+-----
+
+Unreleased
+
+Changes since 1.1.0:
+
+New features
+~~~~~~~~~~~~
+
+Improvements
+~~~~~~~~~~~~
+
+Bug Fixes
+~~~~~~~~~
+
 1.1.0
 -----
 

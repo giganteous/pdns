@@ -9,3 +9,4 @@ These chapters contain information on the advanced features of dnsdist
    acl
    ecs
    qpslimits
+   ebpf

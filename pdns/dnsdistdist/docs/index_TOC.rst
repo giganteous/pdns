@@ -2,7 +2,8 @@ Table of Contents
 =================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
+   :glob:
 
    index
    install
@@ -10,10 +11,10 @@ Table of Contents
    running
    rules-actions
    statistics
-   guides/index.rst
-   advanced/index.rst
-   reference/index.rst
-   manpages/dnsdist.1
+   guides/*
+   advanced/index
+   reference/index
+   manpages/*
    changelog
    upgrade_guide
    glossary

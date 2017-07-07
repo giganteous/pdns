@@ -48,8 +48,8 @@ URL Endpoints
   This endpoint accepts a ``command`` query for different statistics:
 
   * ``stats``: Get all :doc:`../statistics` as a JSON dict
-  * ``dynblocklist``: Get all current :ref:`dynblocks`, keyed by netmask
-  * ``ebpfblocklist``: Idem, but for :ref:`ebpf` blocks
+  * ``dynblocklist``: Get all current :doc:`dynamic blocks <dynblocks>`, keyed by netmask
+  * ``ebpfblocklist``: Idem, but for :doc:`eBPF <../advanced/ebpf>` blocks
 
   **Example request**:
 

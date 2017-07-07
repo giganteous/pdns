@@ -15,13 +15,13 @@ Functions and Types
 
 Within dnsdist several core object types exist:
 
-* ``Server``: generated with newServer, represents a downstream server
-* ``ComboAddress``: represents an IP address and port
-* ``DNSName``: represents a domain name
-* ``NetmaskGroup``: represents a group of netmasks
-* ``QPSLimiter``: implements a QPS-based filter
-* ``SuffixMatchNode``: represents a group of domain suffixes for rapid testing of membership
-* ``DNSHeader``: represents the header of a DNS packet
+* :class:`Server`: generated with :func:`newServer`, represents a downstream server
+* :class:`ComboAddress`: represents an IP address and port
+* :class:`DNSName`: represents a domain name
+* :class:`NetmaskGroup`: represents a group of netmasks
+* :class:`QPSLimiter`: implements a QPS-based filter
+* :class:`SuffixMatchNode`: represents a group of domain suffixes for rapid testing of membership
+* :class:`DNSHeader`: represents the header of a DNS packet
 
 The existence of most of these objects can mostly be ignored, unless you plan to write your own hooks and policies, but it helps to understand an expressions like:
 
@@ -331,6 +331,87 @@ Attributes
 
   The weight of the server
 
+Pools
+-----
+
+:class:`Server`\ s can be part of any number of pools.
+Pools are automatically created when a server is added to a pool (with :func:`newServer`).
+
+.. function:: getPool(name) -> ServerPool
+
+  Returns a :class:`ServerPool` or nil.
+
+  :param string name: The name of the pool
+
+.. class:: ServerPool
+
+  This represents the pool where zero or more servers are part of.
+
+.. classmethod:: ServerPool:getCache() -> PacketCache
+
+  Returns the :class:`PacketCache` for this pool or nil.
+
+.. classmethod:: setCache(cache)
+
+  Adds ``cache`` as the pool's cache.
+
+  :param PacketCache cache: The new cache to add to the pool
+
+.. classmethod:: unsetCache()
+
+  Removes the cache from this pool.
+
+PacketCache
+~~~~~~~~~~~
+
+A Pool can have a packet cache to answer queries directly in stead of going to the backend.
+See :doc:`../guides/cache` for a how to.
+
+.. function:: newPacketCache(maxEntries[, maxTTL=86400[, minTTL=0[, temporaryFailureTTL=60[, staleTTL=60[, dontAge=false]]]]]) -> PacketCache
+
+  Creates a new :class:`PacketCache` with the settings specified.
+
+  :param int maxEntries: The maximum number of entries in this cache
+  :param int maxTTL: Cap the TTL for records to his number
+  :param int minTTL: Don't cache entries with a TTL lower than this
+  :param int temporaryFailureTTL: On a SERVFAIL or REFUSED from the backend, cache for this amount of seconds
+  :param int staleTTL: When the backend servers are not reachable, send responses if the cache entry is expired at most this amount of seconds
+  :param bool dontAge: Don't reduce TTLs when serving from the cache. use this when :program:`dnsdist` fronts a cluster of authoritative servers
+
+.. class:: PacketCache
+
+  Represents a cache that can be part of :class:`ServerPool`.
+
+.. classmethod:: PacketCache:expunge(n)
+
+  Remove entries from the cache, leaving at most ``n`` entries
+
+  :param int n: Number of entries to keep
+
+.. classmethod:: PacketCache:expungeByName(name [, qtype=dnsdist.ANY])
+
+  Remove entries matching ``name`` and type from the cache.
+
+  :param DNSName name: The name to expunge
+  :param int qtype: The type to expunge
+
+.. classmethod:: PacketCache:isFull() -> bool
+
+  Return true if the cache has reached the maximum number of entries.
+
+.. classmethod:: PacketCache:printStats()
+
+  Print the cache stats (hits, misses, deferred lookups and deferred inserts).
+
+.. classmethod:: PacketCache:purgeExpired(n)
+
+  Remove expired entries from the cache until there is at most ``n`` entries remaining in the cache.
+
+  :param int n: Number of entries to keep
+
+.. classmethod:: PacketCache:toString() -> string
+
+  Return the number of entries in the Packet Cache, and the maximum number of entries
 
 Status, Statistics and More
 ---------------------------
@@ -863,6 +944,90 @@ The following actions exist.
 
   :param string remote: An IP:PORT conbination to send the copied queries to
   :param bool addECS: Whether or not to add ECS information. Default false
+
+.. _dynblocksref:
+
+Dynamic Blocks
+--------------
+
+.. function:: addDynBlocks(addresses, message[, seconds])
+
+  Block a set of addresses with ``message`` for (optionally) a number of seconds.
+  The default number of seconds to block for is 10.
+
+  :param addresses: set of Addresses as returned by an exceed function
+  :param string message: The message to show next to the blocks
+  :param int seconds: The number of seconds this block to expire
+
+.. function:: clearDynBlocks()
+
+  Remove all current dynamic blocks.
+
+.. function:: showDynBlocks()
+
+  List all dynamic blocks in effect.
+
+.. function:: setDynBlocksAction(action)
+
+  Set which action is performed when a query is blocked.
+  Only DNSAction.Drop (the default) and DNSAction.Refused are supported
+
+.. function:: addBPFFilterDynBlocks(addresses, filter[, seconds])
+
+  Block the set of addresses using the supplied BPF Filter, for seconds seconds (10 by default)
+
+  :param addresses: A set of addresses as returned by the exceed functions.
+  :param filter: and EBPF filter
+  :param int seconds: Number of seconds to block for
+
+.. _exceedfuncs:
+
+Getting addresses that exceeded parameters
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. function:: exceedServFails(rate, seconds)
+
+  Get set of addresses that exceed ``rate`` servfails/s over ``seconds`` seconds
+
+  :param int rate: Number of Servfails per second to exceed
+  :param int seconds: Number of seconds the rate has been exceeded
+
+.. function:: exceedNXDOMAINs(rate, seconds)
+
+  get set of addresses that exceed ``rate`` NXDOMAIN/s over ``seconds`` seconds
+
+  :param int rate: Number of NXDOMAIN per second to exceed
+  :param int seconds: Number of seconds the rate has been exceeded
+
+.. function:: exceedRespByterate(rate, seconds)
+
+  get set of addresses that exceeded ``rate`` bytes/s answers over ``seconds`` seconds
+
+  :param int rate: Number of bytes per second to exceed
+  :param int seconds: Number of seconds the rate has been exceeded
+
+.. function:: exceedQRate(rate, seconds)
+
+  Get set of address that exceed ``rate`` queries/s over ``seconds`` seconds
+
+  :param int rate: Number of queries per second to exceed
+  :param int seconds: Number of seconds the rate has been exceeded
+
+.. function:: exceedQTypeRate(type, rate, seconds)
+
+  Get set of address that exceed ``rate`` queries/s for queries of QType ``type`` over ``seconds`` seconds
+
+  :param int type: QType
+  :param int rate: Number of QType queries per second to exceed
+  :param int seconds: Number of seconds the rate has been exceeded
+
+Other functions
+---------------
+
+.. function:: maintenance()
+
+  If this function exists, it is called every second to so regular tasks.
+  This can be used for e.g. :doc:`Dynamic Blocks <../guides/dynblocks>`.
 
 Constants
 ---------

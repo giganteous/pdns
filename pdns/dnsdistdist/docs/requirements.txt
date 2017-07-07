@@ -1,4 +1,5 @@
 Sphinx>=1.5.0
 git+https://github.com/pieterlexis/sphinx-lua@pdns
+git+https://github.com/pieterlexis/sphinx-jsondomain@no-type-links
 sphinxcontrib-httpdomain
-sphinx-jsondomain
+sphinxcontrib-fulltoc

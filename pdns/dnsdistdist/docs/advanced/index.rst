@@ -10,3 +10,4 @@ These chapters contain information on the advanced features of dnsdist
    ecs
    qpslimits
    ebpf
+   tuning

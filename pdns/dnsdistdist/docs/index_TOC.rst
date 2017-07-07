@@ -13,6 +13,7 @@ Table of Contents
    guides/index.rst
    advanced/index.rst
    reference/index.rst
+   manpages/dnsdist.1
    changelog
    upgrade_guide
    glossary

@@ -11,3 +11,4 @@ These chapters contain information on the advanced features of dnsdist
    qpslimits
    ebpf
    tuning
+   snmp

@@ -918,6 +918,18 @@ The following actions exist.
 
   Don't lookup the cache for this query, don't store the answer.
 
+.. function:: SNMPTrapAction([message])
+
+  Send an SNMP trap, adding the optional ``message`` string as the query description.
+
+  :param string message: The mesage to include
+
+.. function:: SNMPTrapResponseAction([message])
+
+  Send an SNMP trap, adding the optional ``message`` string as the query description.
+
+  :param string message: The mesage to include
+
 .. function:: SpoofAction(ip[, ip[...]])
               SpoofAction(ips)
 

@@ -9,6 +9,7 @@ Table of Contents
    quickstart
    running
    rules-actions
+   statistics
    guides/index.rst
    advanced/index.rst
    reference/index.rst

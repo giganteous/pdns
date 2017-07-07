@@ -47,7 +47,7 @@ URL Endpoints
   The ``Accept`` request header is ignored.
   This endpoint accepts a ``command`` query for different statistics:
 
-  * ``stats``: Get all :doc:`statistics` as a JSON dict
+  * ``stats``: Get all :doc:`../statistics` as a JSON dict
   * ``dynblocklist``: Get all current :ref:`dynblocks`, keyed by netmask
   * ``ebpfblocklist``: Idem, but for :ref:`ebpf` blocks
 
@@ -200,7 +200,7 @@ JSON Objects
 
   This represents a statistics element.
 
-  :property string name: The name of this statistic. See :doc:`Statistics`
+  :property string name: The name of this statistic. See :doc:`../statistics`
   :property string type: "StatisticItem"
   :property integer value: The value for this item
 

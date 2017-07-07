@@ -35,7 +35,6 @@ EXTRA_DIST=dnslabeltext.rl \
 	   README.md \
 	   delaypipe.cc delaypipe.hh \
 	   html \
-	   dnsdist.1.md \
 	   .version \
 	   contrib \
 	   build-aux/gen-version \

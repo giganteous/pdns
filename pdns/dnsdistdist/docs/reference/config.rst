@@ -607,7 +607,7 @@ Managing Rules
   :param str netblock: An IPv4 or IPv6 netblock
   :param {str} netblocks: A list of IPv4 or IPv6 netblocks
   :param DNSName dnsname: A :class:`DNSName`
-  :param {DNSName} dnsnames: A list of :class:`DNSName`s
+  :param {DNSName} dnsnames: A list of :class:`DNSName`\ s
 
   .. versionadded:: 1.2.0
      DNSName rules.

@@ -535,6 +535,15 @@ clients to fall back to TCP.
 
 To turn this per IP or range limit into a global limit, use NotRule(MaxQPSRule(5000)) instead of MaxQPSIPRule.
 
+The following rule might give you insight in what you would be blocking; Run it for a while, then think of the calls it will generate to your front office:
+
+```
+lggr = newRemoteLogger('localhost:1231')
+addAction(MaxQPSIPRule(30, 32, 48), RemoteLogAction(lggr))
+```
+
+Run [the python protobuf logger](https://github.com/PowerDNS/pdns/blob/master/contrib/ProtobufLogger.py) on localhost:1231 to complete the setup.
+
 TeeAction
 ---------
 This action sends off a copy of a UDP query to another server, and keeps statistics
